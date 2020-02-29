@@ -1,5 +1,6 @@
 use crate::traits::DelimiterSpaced;
 
+#[derive(Debug)]
 pub struct KebabCase {
     spacing_char: char,
 }

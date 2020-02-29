@@ -1,6 +1,7 @@
 use case_style::CaseStyle;
 
 fn main() {
+    println!("Explicitly");
     println!(
         "{:?}",
         CaseStyle::from_camelcase("camelCase").to_kebabcase()
@@ -24,5 +25,37 @@ fn main() {
     println!(
         "{:?}",
         CaseStyle::from_sentencecase("This is a sentence.").to_camelcase()
+    );
+
+    println!("\nImplicitly");
+    println!(
+        "{:?}",
+        CaseStyle::guess("camelCase").unwrap().to_kebabcase()
+    );
+    println!(
+        "{:?}",
+        CaseStyle::guess("snake_case").unwrap().to_sentencecase()
+    );
+    println!(
+        "{:?}",
+        CaseStyle::guess("lowercase space")
+            .unwrap()
+            .to_constantcase()
+    );
+    println!(
+        "{:?}",
+        CaseStyle::guess("CONSTANT_CASE").unwrap().to_snakecase()
+    );
+    println!(
+        "{:?}",
+        CaseStyle::guess("kebab-case")
+            .unwrap()
+            .to_lowercase_spacecase()
+    );
+    println!(
+        "{:?}",
+        CaseStyle::guess("This is a sentence.")
+            .unwrap()
+            .to_camelcase()
     );
 }

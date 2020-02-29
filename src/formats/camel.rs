@@ -2,6 +2,7 @@ use crate::objects::Token;
 use crate::traits::Case;
 use crate::CaseStyle;
 
+#[derive(Debug)]
 pub struct CamelCase;
 
 impl Default for CamelCase {
@@ -11,12 +12,12 @@ impl Default for CamelCase {
 }
 
 impl Case for CamelCase {
-    fn parse_str<S: AsRef<str>>(&self, input: S) -> CaseStyle {
-        let mut tokens = Vec::with_capacity(input.as_ref().len());
+    fn parse_str(&self, input: &str) -> CaseStyle {
+        let mut tokens = Vec::with_capacity(input.len());
         let mut first = true;
         tokens.push(Token::Start);
 
-        for c in input.as_ref().chars() {
+        for c in input.chars() {
             if first {
                 tokens.push(Token::FirstLetter(c.to_ascii_lowercase()));
                 first = false;
@@ -33,7 +34,7 @@ impl Case for CamelCase {
 
         CaseStyle {
             tokens: tokens,
-            original: String::from(input.as_ref()),
+            original: String::from(input),
             case_info: Some(String::from("camel")),
         }
     }

@@ -1,12 +1,13 @@
 use crate::objects::Token;
 use crate::CaseStyle;
+use std::fmt::Debug;
 
-pub trait Case: Default {
-    fn parse_str<S: AsRef<str>>(&self, input: S) -> CaseStyle;
+pub trait Case: Debug {
+    fn parse_str(&self, input: &str) -> CaseStyle;
     fn build_string(&self, obj: CaseStyle) -> String;
 }
 
-pub trait DelimiterSpaced: Default {
+pub trait DelimiterSpaced: Debug {
     fn spacing_char(&self) -> char;
     fn do_uppercase(&self) -> bool {
         false
@@ -17,14 +18,14 @@ impl<T> Case for T
 where
     T: DelimiterSpaced,
 {
-    fn parse_str<S: AsRef<str>>(&self, input: S) -> CaseStyle {
-        let mut tokens = Vec::with_capacity(input.as_ref().len());
+    fn parse_str(&self, input: &str) -> CaseStyle {
+        let mut tokens = Vec::with_capacity(input.len());
         let mut first = true;
         let mut after_space = false;
 
         tokens.push(Token::Start);
 
-        for c in input.as_ref().chars() {
+        for c in input.chars() {
             if c == self.spacing_char() {
                 if first {
                     tokens.push(Token::Literal(c.to_string()));
@@ -52,7 +53,7 @@ where
 
         CaseStyle {
             tokens: tokens,
-            original: String::from(input.as_ref()),
+            original: String::from(input),
             case_info: None,
         }
     }

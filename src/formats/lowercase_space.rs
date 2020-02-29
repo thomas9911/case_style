@@ -1,5 +1,6 @@
 use crate::traits::DelimiterSpaced;
 
+#[derive(Debug)]
 pub struct LowercaseSpace {
     spacing_char: char,
 }

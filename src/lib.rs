@@ -1,5 +1,5 @@
-//! Converts from and to different case style
-//! 
+//! Converts from and to different case styles
+//!
 //! # example
 //! ```
 //! use case_style::CaseStyle;
@@ -7,7 +7,7 @@
 //! println!("{}", kebab);
 //! # assert_eq!("camel-case", kebab);
 //! ```
-//! 
+//!
 //! Current supported formats:
 //!   - SnakeCase
 //!   - CamelCase
@@ -15,11 +15,11 @@
 //!   - KebabCase
 //!   - LowercaseSpace
 //!   - SentenceCase
-//! 
+//!
 //! for a up to date list look at the docs
 
-
 pub mod formats;
+pub mod guesser;
 pub mod objects;
 pub mod traits;
 pub use objects::{Token, Tokens};
@@ -82,12 +82,17 @@ impl_case!(from_sentencecase, to_sentencecase, formats::SentenceCase);
 impl CaseStyle {
     /// Use Case to convert string to CaseStyle object
     pub fn decode<T: Case, S: AsRef<str>>(case: T, input: S) -> CaseStyle {
-        case.parse_str(input)
+        case.parse_str(input.as_ref())
     }
 
     /// Use Case to convert CaseStyle object to String
     pub fn encode<T: Case>(case: T, input: CaseStyle) -> String {
         case.build_string(input)
+    }
+
+    pub fn guess<S: AsRef<str>>(input: S) -> Result<CaseStyle, ()> {
+        let case_type = guesser::guess_type(input.as_ref())?;
+        Ok(case_type.parse_str(input.as_ref()))
     }
 }
 
@@ -142,4 +147,13 @@ mod invertable {
             "This is a test sentence."
         );
     }
+}
+
+#[test]
+fn guess_test() {
+    let s = "snake-case";
+    let t = CaseStyle::guess(s).unwrap();
+    let x = t.to_camelcase();
+
+    assert_eq!(x, "snakeCase")
 }
