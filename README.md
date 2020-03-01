@@ -1,5 +1,6 @@
 # case_style
 
+[![Latest Version]][crates.io] [![Documentation]][docs.rs] ![License]
 Converts from and to different case styles
 
 ## Examples
@@ -41,7 +42,7 @@ let filtered_input: String = input
 let filtered_input = filtered_input.trim();
 
 let snake = CaseStyle::guess(filtered_input)
-    .unwrap_or(CaseStyle::from_lowercase_spacecase(input))
+    .unwrap_or(CaseStyle::from_lowercase_spacecase(filtered_input))
     .to_camelcase();
 println!("{}", snake);
 assert_eq!("thisIsJustSomeRandomInput", snake);
@@ -56,3 +57,5 @@ Current supported formats:
   - SentenceCase
 
 for a up to date list look at the docs
+
+License: Unlicense
