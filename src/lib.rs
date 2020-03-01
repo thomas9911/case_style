@@ -1,4 +1,6 @@
-//! [![Latest Version]][crates.io] [![Documentation]][docs.rs] ![License]
+//! [![Crates.io](https://img.shields.io/crates/v/case_style)](https://crates.io/crates/case_style)
+//! [![Documentation](https://docs.rs/case_style/badge.svg)](https://docs.rs/case_style)
+//! ![Crates.io](https://img.shields.io/crates/l/case_style)
 //! 
 //! Converts from and to different case styles
 //!
