@@ -57,6 +57,7 @@ Current supported formats:
   - ConstantCase
   - KebabCase
   - LowercaseSpace
+  - PascalCase
   - SentenceCase
 
 for a up to date list look at the docs

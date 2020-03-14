@@ -16,7 +16,7 @@ fn main() {
     );
     println!(
         "{:?}",
-        CaseStyle::from_constantcase("CONSTANT_CASE").to_snakecase()
+        CaseStyle::from_constantcase("CONSTANT_CASE").to_pascalcase()
     );
     println!(
         "{:?}",
@@ -25,6 +25,10 @@ fn main() {
     println!(
         "{:?}",
         CaseStyle::from_sentencecase("This is a sentence.").to_camelcase()
+    );
+    println!(
+        "{:?}",
+        CaseStyle::from_pascalcase("PascalCase").to_snakecase()
     );
 
     println!("\nImplicitly");
@@ -44,7 +48,7 @@ fn main() {
     );
     println!(
         "{:?}",
-        CaseStyle::guess("CONSTANT_CASE").unwrap().to_snakecase()
+        CaseStyle::guess("CONSTANT_CASE").unwrap().to_pascalcase()
     );
     println!(
         "{:?}",
@@ -57,5 +61,9 @@ fn main() {
         CaseStyle::guess("This is a sentence.")
             .unwrap()
             .to_camelcase()
+    );
+    println!(
+        "{:?}",
+        CaseStyle::guess("PascalCase").unwrap().to_snakecase()
     );
 }

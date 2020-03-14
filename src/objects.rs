@@ -6,10 +6,14 @@ pub enum Token {
     Spacing,
     /// first char in the stream
     FirstLetter(char),
-    /// first char after split
-    AfterSpacing(char),
     /// just a char
-    Letter(char),
+    Char(char),
+    /// first char after split
+    AfterSpacingChar(char),
+    /// just a digit
+    Digit(char),
+    /// first digit after split
+    AfterSpacingDigit(char),
     /// text that should not be treated
     Literal(String),
     /// start of the stream

@@ -1,12 +1,11 @@
 [package]
 name = "case_style"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["thomas"]
 edition = "2018"
 readme = "README.md"
 description = "Converts from and to different case styles"
 license = "Unlicense"
-license-file = "LICENSE"
 repository = "https://github.com/thomas9911/case_style"
 
 [dependencies]

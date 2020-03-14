@@ -38,7 +38,11 @@ impl Case for SentenceCase {
             };
             let new_c = c.to_ascii_lowercase();
             if after_space {
-                tokens.push(Token::AfterSpacing(new_c));
+                if new_c.is_digit(10) {
+                    tokens.push(Token::AfterSpacingDigit(new_c));
+                } else {
+                    tokens.push(Token::AfterSpacingChar(new_c));
+                }
                 after_space = false;
                 first = false;
                 continue;
@@ -55,7 +59,11 @@ impl Case for SentenceCase {
                 tokens.push(Token::FirstLetter(new_c));
                 first = false;
             } else {
-                tokens.push(Token::Letter(new_c));
+                if new_c.is_digit(10) {
+                    tokens.push(Token::Digit(new_c));
+                } else {
+                    tokens.push(Token::Char(new_c));
+                }
             }
         }
 
@@ -75,7 +83,10 @@ impl Case for SentenceCase {
                 Token::End => buffer.push('.'),
                 Token::Spacing => buffer.push(' '),
                 Token::FirstLetter(c) => buffer.push(c.to_ascii_uppercase()),
-                Token::Letter(c) | Token::AfterSpacing(c) => buffer.push(*c),
+                Token::Char(c)
+                | Token::AfterSpacingChar(c)
+                | Token::Digit(c)
+                | Token::AfterSpacingDigit(c) => buffer.push(*c),
                 Token::Literal(s) => buffer.push_str(&s),
             }
         }

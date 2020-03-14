@@ -8,6 +8,7 @@ pub fn guess_type<S: AsRef<str>>(input: S) -> Result<Box<dyn Case>, ()> {
         x if is_lowercase_space(x) => Ok(Box::new(formats::LowercaseSpace::default())),
         x if is_constant_case(x) => Ok(Box::new(formats::ConstantCase::default())),
         x if is_camel_case(x) => Ok(Box::new(formats::CamelCase::default())),
+        x if is_pascal_case(x) => Ok(Box::new(formats::PascalCase::default())),
         x if is_sentence_case(x) => Ok(Box::new(formats::SentenceCase::default())),
 
         _ => Err(()),
@@ -41,6 +42,12 @@ fn is_lowercase_space(input: &str) -> bool {
 fn is_camel_case(input: &str) -> bool {
     let mut chars = input.chars();
     let what_first_char = chars.next().unwrap_or(' ').is_ascii_lowercase();
+    what_first_char && chars.all(|x| x.is_ascii_alphabetic())
+}
+
+fn is_pascal_case(input: &str) -> bool {
+    let mut chars = input.chars();
+    let what_first_char = chars.next().unwrap_or(' ').is_ascii_uppercase();
     what_first_char && chars.all(|x| x.is_ascii_alphabetic())
 }
 
@@ -111,6 +118,17 @@ fn camel() {
     assert!(!is_camel_case("snake_case"));
     assert!(!is_camel_case("PascelCase"));
     assert!(!is_camel_case("camelCase:D"));
+}
+
+#[test]
+fn pascal() {
+    assert!(is_pascal_case("PascalCase"));
+    assert!(is_pascal_case("Testing"));
+    assert!(is_pascal_case("TestingPascalCase"));
+    assert!(is_pascal_case("PASCALCASE"));
+    assert!(!is_pascal_case("snake_case"));
+    assert!(!is_pascal_case("camelCase"));
+    assert!(!is_pascal_case("PascalCase:D"));
 }
 
 #[test]

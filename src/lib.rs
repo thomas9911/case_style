@@ -1,7 +1,7 @@
 //! [![Crates.io](https://img.shields.io/crates/v/case_style)](https://crates.io/crates/case_style)
 //! [![Documentation](https://docs.rs/case_style/badge.svg)](https://docs.rs/case_style)
 //! ![Crates.io](https://img.shields.io/crates/l/case_style)
-//! 
+//!
 //! Converts from and to different case styles
 //!
 //! # Examples
@@ -41,26 +41,28 @@
 //!     .filter(|x| x == &' ' || x.is_ascii_alphanumeric())  
 //!     .collect();
 //! let filtered_input = filtered_input.trim();
-//! 
+//!
 //! let snake = CaseStyle::guess(filtered_input)
 //!     .unwrap_or(CaseStyle::from_lowercase_spacecase(filtered_input))
 //!     .to_camelcase();
 //! println!("{}", snake);
 //! assert_eq!("thisIsJustSomeRandomInput", snake);
 //! ```
-//! 
+//!
 //! Current supported formats:
 //!   - SnakeCase
 //!   - CamelCase
 //!   - ConstantCase
 //!   - KebabCase
 //!   - LowercaseSpace
+//!   - PascalCase
 //!   - SentenceCase
 //!
 //! for a up to date list look at the docs
 
 pub mod formats;
 pub mod guesser;
+pub mod naming_conventions;
 pub mod objects;
 pub mod traits;
 pub use objects::{Token, Tokens};
@@ -92,14 +94,14 @@ macro_rules! impl_case {
             #[doc = $type_name]
             #[doc = "Default trait to convert to CaseStyle"]
             pub fn $from_name<S: AsRef<str>>(input: S) -> CaseStyle {
-                Self::decode(<$input_type>::default(), input)
+                Self::decode(&<$input_type>::default(), input)
             }
 
             #[doc = "uses"]
             #[doc = $type_name]
             #[doc = "Default trait to convert to String"]
             pub fn $to_name(self) -> String {
-                Self::encode(<$input_type>::default(), self)
+                Self::encode(&<$input_type>::default(), self)
             }
         }
     };
@@ -117,17 +119,18 @@ impl_case!(
     to_lowercase_spacecase,
     formats::LowercaseSpace
 );
+impl_case!(from_pascalcase, to_pascalcase, formats::PascalCase);
 impl_case!(from_constantcase, to_constantcase, formats::ConstantCase);
 impl_case!(from_sentencecase, to_sentencecase, formats::SentenceCase);
 
 impl CaseStyle {
     /// Use Case to convert string to CaseStyle object
-    pub fn decode<T: Case, S: AsRef<str>>(case: T, input: S) -> CaseStyle {
+    pub fn decode<T: Case, S: AsRef<str>>(case: &T, input: S) -> CaseStyle {
         case.parse_str(input.as_ref())
     }
 
     /// Use Case to convert CaseStyle object to String
-    pub fn encode<T: Case>(case: T, input: CaseStyle) -> String {
+    pub fn encode<T: Case>(case: &T, input: CaseStyle) -> String {
         case.build_string(input)
     }
 
@@ -170,6 +173,14 @@ mod invertable {
         assert_eq!(
             CaseStyle::from_lowercase_spacecase("lowercase space").to_lowercase_spacecase(),
             "lowercase space"
+        );
+    }
+
+    #[test]
+    fn pascalcasee() {
+        assert_eq!(
+            CaseStyle::from_pascalcase("PascalCase").to_pascalcase(),
+            "PascalCase"
         );
     }
 
