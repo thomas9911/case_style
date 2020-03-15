@@ -13,6 +13,17 @@
 //! assert_eq!("camel-case", kebab);
 //! ```
 //!
+//! Or from string
+//! ```
+//! use case_style::CaseStyle;
+//! let pascal = CaseStyle::from_case("kebab", "kebab-case")
+//!     .expect("kebab is an existing format")
+//!     .to_case("Pascal")
+//!     .expect("pascal is an existing format");
+//! println!("{}", pascal);
+//! assert_eq!("KebabCase", pascal);
+//! ```
+//!
 //! And one where you don't know exactly:
 //! ```
 //! use case_style::CaseStyle;
@@ -134,9 +145,24 @@ impl CaseStyle {
         case.build_string(input)
     }
 
+    /// Guess case style and on success convert to tokens
     pub fn guess<S: AsRef<str>>(input: S) -> Result<CaseStyle, ()> {
         let case_type = guesser::guess_type(input.as_ref())?;
         Ok(case_type.parse_str(input.as_ref()))
+    }
+
+    /// Instead of choosing a input case style on build time, decide it later.
+    /// errors if case does not exists
+    pub fn from_case<S: AsRef<str>>(case: S, input: S) -> Result<CaseStyle, String> {
+        let case_type = guesser::case_from_string(case)?;
+        Ok(case_type.parse_str(input.as_ref()))
+    }
+
+    /// Instead of choosing a output case style on build time, decide it later.
+    /// errors if case does not exists
+    pub fn to_case<S: AsRef<str>>(self, case: S) -> Result<String, String> {
+        let case_type = guesser::case_from_string(case)?;
+        Ok(case_type.build_string(self))
     }
 }
 

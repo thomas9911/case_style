@@ -1,5 +1,15 @@
 
-## [0.2.0] 2019-03-01
+## [0.2.1] 2019-03-15
+
+### Added
+
+- to_case and from_case functions
+
+- example convert
+
+- more tests and docs
+
+## [0.2.0] 2019-03-14
 
 ### Added
 

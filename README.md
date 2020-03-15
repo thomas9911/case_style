@@ -15,6 +15,17 @@ println!("{}", kebab);
 assert_eq!("camel-case", kebab);
 ```
 
+Or from string
+```rust
+use case_style::CaseStyle;
+let pascal = CaseStyle::from_case("kebab", "kebab-case")
+    .expect("kebab is an existing format")
+    .to_case("Pascal")
+    .expect("pascal is an existing format");
+println!("{}", pascal);
+assert_eq!("KebabCase", pascal);
+```
+
 And one where you don't know exactly:
 ```rust
 use case_style::CaseStyle;

@@ -1,6 +1,7 @@
 use crate::formats;
 use crate::Case;
 
+/// Guess type based on the input and parse it if input case style guessed, otherwise return error
 pub fn guess_type<S: AsRef<str>>(input: S) -> Result<Box<dyn Case>, ()> {
     match input.as_ref() {
         x if is_snake_case(x) => Ok(Box::new(formats::SnakeCase::default())),
@@ -12,6 +13,31 @@ pub fn guess_type<S: AsRef<str>>(input: S) -> Result<Box<dyn Case>, ()> {
         x if is_sentence_case(x) => Ok(Box::new(formats::SentenceCase::default())),
 
         _ => Err(()),
+    }
+}
+
+/// Instead of choosing a case style on build time, decide it later.
+/// errors if case does not exists.
+///
+/// formats:
+/// - snake
+/// - kebab
+/// - lowercase_space
+/// - constant
+/// - camel
+/// - pascal
+/// - sentence
+pub fn case_from_string<S: AsRef<str>>(input: S) -> Result<Box<dyn Case>, String> {
+    match input.as_ref().to_lowercase().as_ref() {
+        "snake" => Ok(Box::new(formats::SnakeCase::default())),
+        "kebab" => Ok(Box::new(formats::KebabCase::default())),
+        "lowercase_space" | "lowercase space" => Ok(Box::new(formats::LowercaseSpace::default())),
+        "constant" => Ok(Box::new(formats::ConstantCase::default())),
+        "camel" => Ok(Box::new(formats::CamelCase::default())),
+        "pascal" => Ok(Box::new(formats::PascalCase::default())),
+        "sentence" => Ok(Box::new(formats::SentenceCase::default())),
+
+        _ => Err(String::from("Case not found")),
     }
 }
 
